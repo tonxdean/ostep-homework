@@ -1,0 +1,54 @@
+The are answers to the questions at the end of the first chapter:
+
+1.
+
+Given the flag -l 5:100,5:100 I would expect the CPU to be utilized ~100% as
+the arguments provided to that flag mean: run two processes each only running CPU task.
+
+2. 
+
+I would expect that the 4:100 process would take a total of 4 untis to run
+while the 1:0 would tak a total of 7 (Run: io + Run:io_done) for a total of 11. I suspect the 
+"System" in this example is not intelligent enough to run the io process first
+then the CPU process to have the CPU process run while the io process is blocked.
+
+3.
+
+I suspect the process will start the io process, halt that process until io is complete
+but run the CPU process in the meantime. This should result in a total time of 7.
+
+4. 
+
+Since the io bound task is now block the CPU I would expect the total time to reach 11
+again.
+
+5.
+
+I would expect the same results as in #3.
+
+6.
+
+I would expect the first process to start and then wait until all the others complete.
+In this case the CPU should be utilized 100%.
+
+CORRECTION:
+
+I failed to notice the first process was issuing 3 io commands. The actual results
+were that the first process did not run until the other 3 had completed. Since
+the first process needed to run 3 io tasks that meant the cpu remained entirely unused
+while the final 2 tasks were awaiting io.
+
+7.
+
+The results of this trial were what I originally expected for #6. Immediately running
+a process that completed an io task may be a good idea as it may be more likely
+the same process has more io tasks. Many programs copy/write/read more than 1 file 
+at a time, databases for example.
+
+8.
+
+I would expect to see generally better performance when IO_RUN_IMMEDIATE and SWITCH_ON_IO are on.
+But as these are "random" processes I would not be able to confirm that without running
+a large number of tests.
+
+
